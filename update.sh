@@ -1,8 +1,5 @@
 #!/bin/bash
 set -e
-set -x
-
-#IP=curl ifconfig.me/ip
 
 declare -A CF
 while read line
@@ -10,21 +7,31 @@ do
 	CF["${line%=*}"]="${line#*=}"
 done < cloudflare.conf
 
+set -x
+URL=${CF[subdomain]:+${CF[subdomain]}.}${CF[domain]}
+OLD_IP=$(dig $URL +short | awk '{ print; exit }')
+NEW_IP=$(dig myip.opendns.com @resolver1.opendns.com +short)
+
 # get the cloudflare record ID
 #ALL_RECORDS=curl https://www.cloudflare.com/api_json/ \
 curl https://www.cloudflare.com/api_json/ \
-	-d "tkn=${CF[token]}" \
 	-d "email=${CF[email]}" \
-	-d "z=${CF[website]}" \
-	-d 'a=stats'
-#	-d 'a=rec_load_all'
+	-d "tkn=${CF[token]}" \
+	-d "z=${CF[domain]}" \
+	-d 'a=rec_load_all'
+#	-d 'a=stats' \
 
 # update the record with the new IP
-#RESP=curl https://www.cloudflare.com/api_json/ \
-#	-d "tkn=${CF_TOKEN}" \
-#	-d "email=${CF_EMAIL}" \
-#	-d "z=${CF_SITE}" \
-#	-d 'a=rec_edit' \
-#	-d "id=${ID}" \
-#	-d "content=${IP}" \
-#	-d "display_content=${IP}"
+: <<'END'
+if [ ${OLD_IP} != ${NEW_IP} ] ;
+then
+	RESP=curl https://www.cloudflare.com/api_json/ \
+		-d 'a=rec_edit' \
+		-d "email=${CF[email]}" \
+		-d "tkn=${CF[token]}" \
+		-d "z=${CF[domain]}" \
+		-d "id=${CF[id]}" \
+		-d "content=${NEW_IP}" \
+		-d "display_content=${NEW_IP}"
+fi
+END
