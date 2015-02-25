@@ -8,10 +8,10 @@ do
 done < cloudflare.conf
 
 URL=${CF[subdomain]:+${CF[subdomain]}.}${CF[domain]}
-OLD_IP=$(dig $URL +short | awk '{ print; exit }')
+OLD_IP=$(dig $URL +short @ns.cloudflare.com | awk '{ print; exit }')
 NEW_IP=$(dig myip.opendns.com @resolver1.opendns.com +short)
 
-if [ ${CF[id]} != '' && $OLD_IP != $NEW_IP ] ;
+if [[ ${CF[record]} != '' && $OLD_IP != $NEW_IP ]] ;
 then
 	curl https://www.cloudflare.com/api_json/ \
 		-d 'a=rec_edit' \
