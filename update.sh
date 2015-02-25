@@ -19,6 +19,9 @@ then
 		-d "tkn=${CF[token]}" \
 		-d "z=${CF[domain]}" \
 		-d "id=${CF[record]}" \
-		-d "content=${NEW_IP}" \
-		-d "display_content=${NEW_IP}"
+		-d 'ttl=1' \
+		-d 'type=A' \
+		-d "name=$URL" \
+		-d "content=$NEW_IP" \
+		-d "display_content=$NEW_IP"
 fi
