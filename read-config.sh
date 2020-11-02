@@ -19,6 +19,15 @@ while read line; do
 	fi
 done < "$1"
 
-for k in "${!config[@]}"; do
-	echo "[$k]=${config[$k]}"
+for k in api_token zone_id; do
+	if [ -z "${config["$k"]}" ]; then
+		echo "Missing config item: $k"
+		exit 1
+	fi
 done
+
+echo -n '('
+for k in "${!config[@]}"; do
+	echo -n "[$k]=${config[$k]} "
+done
+echo -n ')'
