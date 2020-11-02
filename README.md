@@ -26,7 +26,7 @@ Don't use quotes around the keys or values in the config file.
 
 	`./list.sh [path/to/config/file]`
 
-2. The JSON output is difficult to read, paste it into a json validator like
+2. The JSON output is difficult to read, paste it into a pretty printer like
 	[JSONLint](http://jsonlint.com).
 3. Find the desired domain record in the `result` array.
 	* The `id` field is the needed record id.
