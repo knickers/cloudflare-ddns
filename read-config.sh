@@ -14,7 +14,9 @@ fi
 declare -A config
 
 while read line; do
-	config["${line%=*}"]="${line#*=}"
+	if [ -n "${line%=*}" -a -n "${line#*=}" ]; then
+		config["${line%=*}"]="${line#*=}"
+	fi
 done < "$1"
 
 for k in "${!config[@]}"; do
