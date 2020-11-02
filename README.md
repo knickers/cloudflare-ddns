@@ -29,10 +29,14 @@ Don't use quotes around the keys or values in the config file.
 2. The JSON output is difficult to read, paste it into a json validator like
 	[JSONLint](http://jsonlint.com).
 3. Find the desired domain record in the `result` array.
-	* The `type` field will be "A" for regular website domains.
+	* The `id` field is the needed record id.
 	* The `name` field will show the full domain name.
-	* The `id` field is the neede record id.
 4. Add the id to the config file under `record_id`
+
+
+### Run the script
+
+`/path/to/cloudflare-ddns/update.sh    /path/to/config/file`
 
 
 ### Create a CRON job
