@@ -9,7 +9,7 @@ if [ -n "${config[domain]}" ]; then
 	domain="&name=${config[domain]}"
 fi
 
-curl -v "$API/dns_records?type=A$domain" \
+curl "$API/dns_records?type=A$domain" \
 	-H "Authorization: Bearer ${config[api_token]}" \
 	-H 'Content-Type:application/json' \
 
